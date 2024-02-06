@@ -8,11 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TelevisionTest {
     private Television television;
-    private ArrayList<Channel> channels;
+
     @BeforeEach
     public void setUp() {
         television = new Television();
-//        channels = new ArrayList<Channel>();
         television.powerOn();
         television.searchForChannels();
 
@@ -20,7 +19,6 @@ class TelevisionTest {
 
     @AfterEach
     public void tearDown(){
-        channels.clear();
         television.powerOff();
     }
 
