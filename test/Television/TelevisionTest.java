@@ -1,18 +1,26 @@
 package Television;
 
 import org.junit.jupiter.api.*;
+
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TelevisionTest {
     private Television television;
+    private ArrayList<Channel> channels;
     @BeforeEach
     public void setUp() {
         television = new Television();
+//        channels = new ArrayList<Channel>();
         television.powerOn();
+        television.searchForChannels();
+
     }
 
     @AfterEach
     public void tearDown(){
+        channels.clear();
         television.powerOff();
     }
 
@@ -35,6 +43,14 @@ class TelevisionTest {
     }
 
     @Test
+    public void testTVVolumeCannotExceed100(){
+        for (int number = 0; number < 70; number++) {
+            television.increaseVolume();
+        }
+        assertEquals(100,television.getVolume());
+    }
+
+    @Test
     public void testTVDecreasesVolumeWhenVolumeIsDecreased(){
         television.increaseVolume();
         assertEquals(2,television.getVolume());
@@ -43,35 +59,42 @@ class TelevisionTest {
     }
 
     @Test
+    public void testTVVolumeCannotGoLowerThan0(){
+        for (int number = 0; number < 70; number++) {
+            television.decreaseVolume();
+        }
+        assertEquals(0,television.getVolume());
+    }
+
+    @Test
     public void testTVChangesChannelWhenChannelIsChanged(){
-        television.nextChannel();
-        assertEquals(2,television.getChannel());
+        assertEquals("Channel 1",television.nextChannel().toString());
+        assertEquals("Channel 2",television.nextChannel().toString());
     }
 
     @Test
     public void testTVChangesChannelWhenChannelIsChangedBack(){
         television.nextChannel();
         television.nextChannel();
-        television.prevChannel();
-        assertEquals(2,television.getChannel());
-    }
+        assertEquals("Channel 1",television.prevChannel().toString());
 
-    @Test
-    public void testThatChannelCantGoLowerThanChannelOne(){
-        television.prevChannel();
-        assertEquals(1,television.getChannel());
-        television.prevChannel();
-        assertEquals(1,television.getChannel());
 
     }
 
     @Test
-    public void testThatChannelCantGoHigherThanChannel21(){
-        for (int channel = 0; channel < 30; channel++) {
+    public void testThatChannelCantGoLowerThanChannelZero(){
+        television.prevChannel();
+        assertEquals("Channel 0",television.prevChannel().toString());
+
+    }
+
+    @Test
+    public void testThatChannelWillNotExceedChannelUpperLimitRange(){
+        for (int channel = 0; channel < 55; channel++) {
             television.nextChannel();
         }
 
-        assertEquals(21,television.getChannel());
+        assertEquals("Channel 0",television.nextChannel().toString());
 
 
     }
